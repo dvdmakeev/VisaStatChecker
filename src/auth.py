@@ -43,35 +43,3 @@ def authenticate_google_sheets():
     
     service = build("sheets", "v4", credentials=creds)
     return service
-
-def fetch_data_from_sheets(sheet_id, range_name):
-    try:
-        # Authenticate and fetch data
-        service = authenticate_google_sheets()
-        sheet = service.spreadsheets()
-        result = sheet.values().get(spreadsheetId=sheet_id, range=range_name).execute()
-        values = result.get("values", [])
-        
-        if not values:
-            print("No data found.")
-            return pd.DataFrame()  # Return an empty DataFrame if no data
-        
-        # Convert data to a Pandas DataFrame
-        headers = values[0]  # First row is considered headers
-        data = values[1:]    # Remaining rows are data
-        return pd.DataFrame(data, columns=headers)
-    
-    except HttpError as err:
-        print(f"An error occurred: {err}")
-        return pd.DataFrame()
-
-def main():
-    SAMPLE_RANGE_NAME = "Form Responses 1!A2:K"
-    
-    # Fetch data from the sheet
-    df = fetch_data_from_sheets(SAMPLE_SPREADSHEET_ID, SAMPLE_RANGE_NAME)
-    print("Data fetched from Google Sheets:")
-    print(df)
-
-if __name__ == "__main__":
-    main()
