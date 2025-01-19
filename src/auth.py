@@ -16,9 +16,6 @@ TOKEN_FILENAME = "token.json"
 CREDENTIALS_FILENAME = "credentials.json"
 
 
-SAMPLE_SPREADSHEET_ID = "18jFotI0lwie-8p-eU9rjtcVrtsO5GldMbVoyo-Y5EYY"
-
-
 def authenticate_google_sheets():
     creds = None
 
@@ -38,6 +35,6 @@ def authenticate_google_sheets():
         # Save the credentials for the next run
         with open(TOKEN_FILENAME, "w") as token:
             token.write(creds.to_json())
-    
+
     service = build("sheets", "v4", credentials=creds)
     return service
